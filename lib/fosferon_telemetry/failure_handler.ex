@@ -3,14 +3,12 @@ defmodule FosferonTelemetry.FailureHandler do
   Generic `:telemetry` handler for apps whose failure events follow the
   canonical metadata schema: `stage`, `error_class`, `error_message`.
 
-  Scoped to atrapos-shaped events (`[:<app>, :<domain>, :failure]`).
-  MOBuS retains its own handlers until its events adopt the canonical
-  metadata schema.
+  Scoped to 3-segment failure events (`[:<app>, :<domain>, :failure]`).
 
   ## Usage
 
       # In your Application.start/2 or a Telemetry supervisor:
-      FosferonTelemetry.FailureHandler.attach(:atrapos, [:session, :chat, :workbench])
+      FosferonTelemetry.FailureHandler.attach(:my_app, [:session, :checkout, :support])
 
   This attaches a single handler via `:telemetry.attach_many/4` that
   logs all matching events at `:warning` level with the canonical

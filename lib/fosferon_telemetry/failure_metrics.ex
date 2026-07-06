@@ -1,33 +1,32 @@
 defmodule FosferonTelemetry.FailureMetrics do
   @moduledoc """
   Generates `Telemetry.Metrics.counter/2` definitions for failure
-  events across Fosferon apps.
+  events.
 
-  Two input modes cover 3-segment (atrapos-style) and 4-5 segment
-  (mobus-style) event names.
+  Two input modes cover 3-segment and 4–5 segment event names.
 
   ## Shorthand mode (3-segment apps)
 
   For apps where every failure event follows the
   `[:<app>, :<domain>, :failure]` convention:
 
-      FosferonTelemetry.FailureMetrics.counters(:atrapos, [:session, :chat, :workbench])
+      FosferonTelemetry.FailureMetrics.counters(:my_app, [:session, :checkout, :support])
       # => [
-      #   counter("atrapos.session.failure.count", tags: [:stage]),
-      #   counter("atrapos.chat.failure.count", tags: [:stage]),
-      #   counter("atrapos.workbench.failure.count", tags: [:stage])
+      #   counter("my_app.session.failure.count", tags: [:stage]),
+      #   counter("my_app.checkout.failure.count", tags: [:stage]),
+      #   counter("my_app.support.failure.count", tags: [:stage])
       # ]
 
-  ## Explicit tuple mode (4-5 segment apps)
+  ## Explicit tuple mode (4–5 segment apps)
 
   For apps with non-standard event structures, pass a list of
   `{event_name, metric_name}` tuples:
 
       FosferonTelemetry.FailureMetrics.counters([
-        {[:mobus_core, :tenants, :provision, :error],
-         "mobus_core.tenants.provision.error.count"},
-        {[:mobus_core, :tenants, :schema, :create, :error],
-         "mobus_core.tenants.schema.create.error.count"}
+        {[:billing, :invoices, :refund, :error],
+         "billing.invoices.refund.error.count"},
+        {[:billing, :invoices, :line_items, :create, :error],
+         "billing.invoices.line_items.create.error.count"}
       ])
 
   ## Tag discipline

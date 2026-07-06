@@ -5,23 +5,23 @@ defmodule FosferonTelemetry.FailureMetricsTest do
 
   describe "counters/2 (shorthand mode)" do
     test "generates correct counters for each domain" do
-      counters = FailureMetrics.counters(:atrapos, [:session, :chat, :workbench])
+      counters = FailureMetrics.counters(:my_app, [:session, :checkout, :support])
 
       assert length(counters) == 3
 
-      [session, chat, workbench] = counters
+      [session, checkout, support] = counters
 
-      assert session.name == [:atrapos, :session, :failure, :count]
-      assert session.event_name == [:atrapos, :session, :failure]
+      assert session.name == [:my_app, :session, :failure, :count]
+      assert session.event_name == [:my_app, :session, :failure]
       assert session.tags == [:stage]
 
-      assert chat.name == [:atrapos, :chat, :failure, :count]
-      assert chat.event_name == [:atrapos, :chat, :failure]
-      assert chat.tags == [:stage]
+      assert checkout.name == [:my_app, :checkout, :failure, :count]
+      assert checkout.event_name == [:my_app, :checkout, :failure]
+      assert checkout.tags == [:stage]
 
-      assert workbench.name == [:atrapos, :workbench, :failure, :count]
-      assert workbench.event_name == [:atrapos, :workbench, :failure]
-      assert workbench.tags == [:stage]
+      assert support.name == [:my_app, :support, :failure, :count]
+      assert support.event_name == [:my_app, :support, :failure]
+      assert support.tags == [:stage]
     end
 
     test "returns empty list for empty domains" do
@@ -39,31 +39,31 @@ defmodule FosferonTelemetry.FailureMetricsTest do
     test "generates correct counters for explicit tuples" do
       counters =
         FailureMetrics.counters([
-          {[:mobus_core, :tenants, :provision, :error],
-           "mobus_core.tenants.provision.error.count"},
-          {[:mobus_core, :tenants, :schema, :create, :error],
-           "mobus_core.tenants.schema.create.error.count"}
+          {[:billing, :invoices, :refund, :error],
+           "billing.invoices.refund.error.count"},
+          {[:billing, :invoices, :line_items, :create, :error],
+           "billing.invoices.line_items.create.error.count"}
         ])
 
       assert length(counters) == 2
 
-      [provision, schema_create] = counters
+      [refund, line_item_create] = counters
 
-      assert provision.name == [:mobus_core, :tenants, :provision, :error, :count]
-      assert provision.event_name == [:mobus_core, :tenants, :provision, :error]
-      assert provision.tags == [:stage]
+      assert refund.name == [:billing, :invoices, :refund, :error, :count]
+      assert refund.event_name == [:billing, :invoices, :refund, :error]
+      assert refund.tags == [:stage]
 
-      assert schema_create.name == [:mobus_core, :tenants, :schema, :create, :error, :count]
+      assert line_item_create.name == [:billing, :invoices, :line_items, :create, :error, :count]
 
-      assert schema_create.event_name == [
-               :mobus_core,
-               :tenants,
-               :schema,
+      assert line_item_create.event_name == [
+               :billing,
+               :invoices,
+               :line_items,
                :create,
                :error
              ]
 
-      assert schema_create.tags == [:stage]
+      assert line_item_create.tags == [:stage]
     end
 
     test "returns empty list for empty tuples" do
